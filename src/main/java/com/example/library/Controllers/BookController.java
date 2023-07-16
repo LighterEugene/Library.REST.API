@@ -45,15 +45,16 @@ public class BookController {
 
     @PostMapping
     public ResponseEntity<Book> addBook(@RequestBody Book book) {
-        Long libraryId = book.getLibrary().getId();
-        Library library = libraryRepository.findById(libraryId).orElse(null);
-        if (library != null) {
-            book.setLibrary(library);
-            Book savedBook = bookService.addBook(book);
-            return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (book.getLibrary() != null && book.getLibrary().getId() != null) {
+            Long libraryId = book.getLibrary().getId();
+            Library library = libraryRepository.findById(libraryId).orElse(null);
+            if (library != null) {
+                book.setLibrary(library);
+                Book savedBook = bookService.addBook(book);
+                return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 
