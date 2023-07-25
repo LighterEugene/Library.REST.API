@@ -44,12 +44,19 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<Book> addBook(@RequestBody Book book) {
-        if (book.getLibrary() != null && book.getLibrary().getId() != null) {
-            Long libraryId = book.getLibrary().getId();
+    public ResponseEntity<Book> addBook(@RequestBody BookRequest bookRequest) {
+        if (bookRequest.getLibraryId() != null) {
+            Long libraryId = bookRequest.getLibraryId();
             Library library = libraryRepository.findById(libraryId).orElse(null);
             if (library != null) {
+                Book book = new Book();
                 book.setLibrary(library);
+                book.setTitle(bookRequest.getTitle());
+                book.setAuthor(bookRequest.getAuthor());
+                book.setPublicationYear(bookRequest.getPublicationYear());
+                book.setGenre(bookRequest.getGenre());
+                book.setIsbn(bookRequest.getIsbn());
+
                 Book savedBook = bookService.addBook(book);
                 return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
             }
@@ -59,14 +66,26 @@ public class BookController {
 
 
 
+
     @PutMapping("/{id}")
-    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody Book book) {
-        Book updatedBook = bookService.updateBook(id, book);
-        if (updatedBook != null) {
-            return new ResponseEntity<>(updatedBook, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody BookRequest bookRequest) {
+        Book existingBook = bookService.getBookById(id);
+        if (existingBook != null) {
+            Long libraryId = bookRequest.getLibraryId();
+            Library library = libraryRepository.findById(libraryId).orElse(null);
+            if (library != null) {
+                existingBook.setLibrary(library);
+                existingBook.setTitle(bookRequest.getTitle());
+                existingBook.setAuthor(bookRequest.getAuthor());
+                existingBook.setPublicationYear(bookRequest.getPublicationYear());
+                existingBook.setGenre(bookRequest.getGenre());
+                existingBook.setIsbn(bookRequest.getIsbn());
+
+                Book updatedBook = bookService.updateBook(id, existingBook);
+                return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+            }
         }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)

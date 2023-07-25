@@ -1,6 +1,7 @@
 package com.example.library.Controllers;
 
 public class BookRequest {
+    private Long id;
     private Long libraryId;
     private String title;
     private String author;
@@ -8,12 +9,28 @@ public class BookRequest {
     private String genre;
     private String isbn;
 
-    public Long getLibraryId() {
-        return libraryId;
+    // Конструкторы, геттеры и сеттеры
+
+    public BookRequest() {
     }
 
-    public void setLibraryId(Long libraryId) {
-        this.libraryId = libraryId;
+    public BookRequest(Long id, String title, String author, int publicationYear, String genre, String isbn) {
+        this.id = id;
+        this.title = title;
+        this.author = author;
+        this.publicationYear = publicationYear;
+        this.genre = genre;
+        this.isbn = isbn;
+    }
+
+    // Геттеры и сеттеры для всех полей
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -35,7 +52,13 @@ public class BookRequest {
     public int getPublicationYear() {
         return publicationYear;
     }
+    public Long getLibraryId() {
+        return libraryId;
+    }
 
+    public void setLibraryId(Long libraryId) {
+        this.libraryId = libraryId;
+    }
     public void setPublicationYear(int publicationYear) {
         this.publicationYear = publicationYear;
     }
