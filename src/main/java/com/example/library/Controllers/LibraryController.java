@@ -1,8 +1,10 @@
 package com.example.library.Controllers;
 
 import com.example.library.Models.Library;
+import com.example.library.Models.LibraryPatchRequest;
 import com.example.library.Repositories.LibraryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +31,33 @@ public class LibraryController {
     @PostMapping
     public Library createLibrary(@RequestBody Library library) {
         return libraryRepository.save(library);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Library> updateLibrary(@PathVariable Long id, @RequestBody LibraryPatchRequest libraryPatchRequest) {
+        Library existingLibrary = libraryRepository.findById(id).orElse(null);
+        if (existingLibrary != null) {
+            if (libraryPatchRequest.getName() != null) {
+                existingLibrary.setName(libraryPatchRequest.getName());
+            }
+            if (libraryPatchRequest.getAddress() != null) {
+                existingLibrary.setAddress(libraryPatchRequest.getAddress());
+            }
+            if (libraryPatchRequest.getWorkingHours() != null) {
+                existingLibrary.setWorkingHours(libraryPatchRequest.getWorkingHours());
+            }
+            if (libraryPatchRequest.getStaffCount() != null) {
+                existingLibrary.setStaffCount(libraryPatchRequest.getStaffCount());
+            }
+            if (libraryPatchRequest.getFoundationYear() != null) {
+                existingLibrary.setFoundationYear(libraryPatchRequest.getFoundationYear());
+            }
+
+            Library updatedLibrary = libraryRepository.save(existingLibrary);
+            return new ResponseEntity<>(updatedLibrary, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PutMapping("/{id}")

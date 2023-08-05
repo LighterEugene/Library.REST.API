@@ -1,17 +1,16 @@
 package com.example.library.Controllers;
 
 import com.example.library.Models.Book;
+import com.example.library.Models.BookPatchRequest;
 import com.example.library.Models.Library;
-import com.example.library.service.BookService;
+import com.example.library.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.example.library.Repositories.LibraryRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/books")
@@ -88,6 +87,39 @@ public class BookController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Book> updateBook(@PathVariable Long id, @RequestBody BookPatchRequest bookPatchRequest) {
+        Book existingBook = bookService.getBookById(id);
+        if (existingBook != null) {
+            if (bookPatchRequest.getLibraryId() != null) {
+                Long libraryId = bookPatchRequest.getLibraryId();
+                Library library = libraryRepository.findById(libraryId).orElse(null);
+                if (library != null) {
+                    existingBook.setLibrary(library);
+                }
+            }
+            if (bookPatchRequest.getTitle() != null) {
+                existingBook.setTitle(bookPatchRequest.getTitle());
+            }
+            if (bookPatchRequest.getAuthor() != null) {
+                existingBook.setAuthor(bookPatchRequest.getAuthor());
+            }
+            if (bookPatchRequest.getPublicationYear() != null) {
+                existingBook.setPublicationYear(bookPatchRequest.getPublicationYear());
+            }
+            if (bookPatchRequest.getGenre() != null) {
+                existingBook.setGenre(bookPatchRequest.getGenre());
+            }
+            if (bookPatchRequest.getIsbn() != null) {
+                existingBook.setIsbn(bookPatchRequest.getIsbn());
+            }
+
+            Book updatedBook = bookService.updateBook(id, existingBook);
+            return new ResponseEntity<>(updatedBook, HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
         boolean deleted = bookService.deleteBook(id);
