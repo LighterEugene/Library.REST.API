@@ -1,8 +1,8 @@
-package com.example.library.Controllers;
+package com.example.library.сontrollers;
 
-import com.example.library.Models.Library;
-import com.example.library.Models.LibraryPatchRequest;
-import com.example.library.Repositories.LibraryRepository;
+import com.example.library.models.Library;
+import com.example.library.models.LibraryPatchRequest;
+import com.example.library.repositories.LibraryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
