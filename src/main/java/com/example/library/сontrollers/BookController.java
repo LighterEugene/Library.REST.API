@@ -1,14 +1,14 @@
-package com.example.library.Controllers;
+package com.example.library.сontrollers;
 
-import com.example.library.Models.Book;
-import com.example.library.Models.BookPatchRequest;
-import com.example.library.Models.Library;
+import com.example.library.models.Book;
+import com.example.library.models.BookPatchRequest;
+import com.example.library.models.Library;
 import com.example.library.services.BookService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.example.library.Repositories.LibraryRepository;
+import com.example.library.repositories.LibraryRepository;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.library.Models;
+package com.example.library.models;
 
 public class LibraryPatchRequest {
     private String name;
